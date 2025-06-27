@@ -1,0 +1,67 @@
+/* Estilos Gerais */
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; /* Fonte mais moderna */
+    margin: 0;
+    padding: 0;
+    background-color: #6ca9d8; /* Azul claro suave */
+    color: #333;
+    line-height: 1.6;
+}
+
+/* Cabeçalho */
+header {
+    background-color: #2c3e50; /* Azul escuro quase preto */
+    color: #ecf0f1; /* Cinza claro */
+    padding: 1.2rem 0;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Sombra mais pronunciada */
+}
+
+nav {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 25px; /* Mais padding nas laterais */
+}
+
+.logo {
+    font-size: 2rem; /* Logo um pouco maior */
+    font-weight: 700; /* Mais negrito */
+    color: #3498db; /* Azul vibrante para o logo */
+    text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.1);
+}
+
+nav ul {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+}
+
+nav ul li {
+    margin-left: 30px; /* Mais espaçamento entre os itens */
+}
+
+nav ul li a {
+    color: #ecf0f1;
+    text-decoration: none;
+    font-size: 1.05rem;
+    padding: 8px 15px;
+    border-radius: 5px;
+    transition: all 0.3s ease; /* Transição para todas as propriedades */
+}
+
+nav ul li a:hover {
+    background-color: #3498db; /* Fundo azul vibrante no hover */
+    color: white;
+    transform: translateY(-2px); /* Efeito de "levantar" */
+}
+
+/* Formulário de Login */
+        form{
+            background-color: #ffffff;
+            max-width: 450px; /* Um pouco mais largo */
+            /* margin: 60px auto; /* */
+        }   
+       
