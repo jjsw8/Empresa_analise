@@ -1,67 +1,139 @@
-/* Estilos Gerais */
-body {
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; /* Fonte mais moderna */
-    margin: 0;
-    padding: 0;
-    background-color: #6ca9d8; /* Azul claro suave */
-    color: #333;
-    line-height: 1.6;
-}
+php
+/ Inicia a sessão no topo da página para que o header() possa ser usado
+// session_start(); // Removido daqui para ser iniciado apenas após login bem-sucedido
+?>
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Crystal's Lakes - Soluções Hídricas</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <header>
+        <nav>
+            <div class="logo">Crystal's Lakes</div>
+            <ul>
+                <li><a href="#home>Início</a></li>
+                <li><a href="#about>Sobre</a></li>
+                <li><a href="#services>Serviços</a></li>
+                <li><a href="#contact>Contato</a></li>
+            </ul>
+        </nav>
+    </header>
 
-/* Cabeçalho */
-header {
-    background-color: #2c3e50; /* Azul escuro quase preto */
-    color: #ecf0f1; /* Cinza claro */
-    padding: 1.2rem 0;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Sombra mais pronunciada */
-}
 
-nav {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    max-width: 1200px;
-    margin: 0 auto;
-    padding: 0 25px; /* Mais padding nas laterais */
-}
+    <main>
+        <section id="hero" class="hero">
+            <div class="hero-content">
+                <h1>Soluções Inovadoras para um Futuro Sustentável</h1>
+                <p>Nós da Crystal's Lakes oferecemos excelência em gestão de recursos hídricos.</p>
+                <a href="#services class="btn">Conheça Nossos Serviços</a>
+            </div>
+        </section>
 
-.logo {
-    font-size: 2rem; /* Logo um pouco maior */
-    font-weight: 700; /* Mais negrito */
-    color: #3498db; /* Azul vibrante para o logo */
-    text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.1);
-}
 
-nav ul {
-    list-style: none;
-    margin: 0;
-    padding: 0;
-    display: flex;
-}
+        <section id="login" class="login-section">
+            <h2>Acesso Restrito</h2>
+            <!-- Inicio do formulario -->
+            <form method="POST" action="">
+                <label for="usuario">Usuário:</label>
+                <input type="text" id="usuario" name="usuario" placeholder="digite o usuário" required><br>
 
-nav ul li {
-    margin-left: 30px; /* Mais espaçamento entre os itens */
-}
 
-nav ul li a {
-    color: #ecf0f1;
-    text-decoration: none;
-    font-size: 1.05rem;
-    padding: 8px 15px;
-    border-radius: 5px;
-    transition: all 0.3s ease; /* Transição para todas as propriedades */
-}
+                <label for="senha_usuario">Senha:</label>
+                <input type="password" id="senha_usuario" name="senha_usuario" placeholder="digite a senha" required><br>
 
-nav ul li a:hover {
-    background-color: #3498db; /* Fundo azul vibrante no hover */
-    color: white;
-    transform: translateY(-2px); /* Efeito de "levantar" */
-}
 
-/* Formulário de Login */
-        form{
-            background-color: #ffffff;
-            max-width: 450px; /* Um pouco mais largo */
-            /* margin: 60px auto; /* */
-        }   
-       
+                <input type="submit" name="Sendlogin" value="Acessar">
+            </form>
+            <!-- fim do formulario -->
+
+
+            <?php
+            // Configurações do banco de dados
+            $host = 'localhost';
+            $user = 'root';  usuário padrão do XAMPP
+            $password = '';  senha padrão do XAMPP (vazia)
+            $database = 'login'; // substitua pelo nome do seu banco de dados
+
+
+            // Conectar ao banco de dados
+            $conn = new mysqli($host, $user, $password, $database);
+
+
+             Verificar conexão
+                if ($conn->connect_error){// Em um ambiente de produção, é melhor logar o erro e mostrar uma mensagem genérica ao usuário
+                    die("Falha na conexão com o banco de dados"= "$conn->connect_error");}
+
+
+            // Receber dados do forms
+            $dados = filter_input_array(INPUT_POST, FILTER_DEFAULT);
+
+
+            // Acessar o IF quando o usuario clicar no botão de acesso do formulario
+            if (!empty($dados["Sendlogin"])) {
+                // Limpeza básica dos inputs
+                $usuario = $conn->real_escape_string($dados["usuario"]);
+                $senha_digitada = $dados["senha_usuario"]; // A senha não é escapada aqui porque será comparada com hash
+
+
+                // Preparar a consulta SQL para evitar injeção de SQL
+                $query_usuario = "SELECT id, senha FROM usuarios WHERE usuario = ? LIMIT 1";
+                $stmt = $conn->prepare($query_usuario);
+
+
+                if ($stmt) {
+                    $stmt->bind_param("s", $usuario);
+                    $stmt->execute();
+                    $resultado = $stmt->get_result();
+
+
+                    if ($resultado->num_rows == 1) {
+                        // Usuário encontrado, verificar senha
+                        $row_usuario = $resultado->fetch_assoc();
+                       
+                        // ATENÇÃO: md5 não é seguro para senhas! Use password_verify() com password_hash()
+                        // if (md5($senha_digitada) === $row_usuario['senha']) { // Esta linha foi modificada
+                        // Para um sistema seguro, sua senha no banco de dados deve ser um hash gerado por password_hash()
+                        // E a verificação deve ser feita com password_verify($senha_digitada, $row_usuario['senha'])
+                       
+                        // EXEMPLO SEGURO (assumindo que a senha no DB é um hash password_hash()):
+                        // if (password_verify($senha_digitada, $row_usuario['senha'])) {
+                       
+                        // USANDO MD5 COMO NO SEU CÓDIGO ORIGINAL (NÃO RECOMENDADO PARA SEGURANÇA REAL):
+                        if (md5($senha_digitada) === $row_usuario['senha']) {
+                            // Senha correta - iniciar sessão e redirecionar
+                            session_start(); // Inicia a sessão APENAS após login bem-sucedido
+                            $_SESSION['id'] = $row_usuario['id'];
+                            $_SESSION['usuario'] = $usuario; // Use o usuário limpo
+
+
+                            header("Location: dashboard.php"); redireciona para página restrita
+                            exit();
+                        } else {
+                            echo "<p class='error-message'>Erro: Senha incorreta!</p>";
+                        }
+                    } else {
+                        echo "<p class='error-message'>Erro: Usuário não encontrado!</p>";
+                    }
+                    $stmt->close();
+                } else {
+                    echo "<p class='error-message'>Erro na preparação da consulta SQL.</p>";
+                }
+            }
+            // Fechar a conexão com o banco de dados ao final do script
+            $conn->close();
+            ?>
+        </section>
+    </main>
+
+
+    <footer>
+        <p>&copy; 2024 Crystal's Lakes. Todos os direitos reservados.</p>
+    </footer>
+</body>
+</html>
+
+
